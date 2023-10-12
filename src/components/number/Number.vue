@@ -11,8 +11,8 @@
         @input="handleInput"
       />
       <div :class="buttonWrapperClasses">
-        <button :class="buttonClasses" @click="increment">+</button>
-        <button :class="buttonClasses" @click="decrement">-</button>
+        <button :class="buttonClasses" tabindex="-1" @click="increment">+</button>
+        <button :class="buttonClasses" tabindex="-1" @click="decrement">-</button>
       </div>
 
       <!-- Add the optional ping -->
@@ -21,8 +21,8 @@
         <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
       </span>
 
-      <CheckIcon v-if="valid" class="absolute right-10 w-7 h-7 text-emerald-600" />
-      <XCircleIcon v-if="invalid" class="absolute right-10 w-7 h-7 text-red-600" />
+      <CheckIcon v-if="valid" class="absolute right-9 w-7 h-7 text-emerald-600" />
+      <XCircleIcon v-if="invalid" class="absolute right-9 w-7 h-7 text-red-600" />
     </div>
     <span v-if="errorMessage" class="text-xs font-medium text-red-600">{{ errorMessage }}</span>
     <span v-if="helpText" class="text-xs font-medium text-gray-400">{{ helpText }}</span>

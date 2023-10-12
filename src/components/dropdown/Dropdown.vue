@@ -9,11 +9,13 @@
         class="bg-transparent w-full border-none focus:ring-0 focus:outline-none cursor-pointer"
         type="text"
         :readonly="!dropdownOpen"
-        :value="dropdownOpen ? searchQuery : modelValue.label"
+        :value="dropdownOpen ? searchQuery : modelValue?.label ?? ''"
+        @blur="handleBlur"
+        @focus="handleFocus"
         @input="handleInput"
       />
       <div :class="buttonWrapperClasses">
-        <button :class="buttonClasses" @click.stop="toggleDropdown">
+        <button :class="buttonClasses" tabindex="-1" @click.stop="toggleDropdown">
           <ChevronUpIcon v-if="dropdownOpen" class="w-5 h-5 text-gray-400" />
           <ChevronDownIcon v-if="!dropdownOpen" class="w-5 h-5 text-gray-400" />
         </button>
@@ -23,14 +25,10 @@
       <section
         v-if="dropdownOpen"
         ref="optionsRef"
-        class="z-50 w-full border border-slate-600 bg-gray-800 divide-y divide-slate-600 rounded text-gray-200"
+        class="z-50 w-full border border-slate-600 bg-gray-800 divide-y divide-slate-600 rounded text-gray-200 overflow-auto"
         :style="floatingStyles"
       >
-        <div
-          v-for="option in filteredOptions"
-          class="w-full px-2 py-2 hover:bg-slate-600/20 cursor-pointer"
-          @click.stop="selectOption(option)"
-        >
+        <div v-for="option in filteredOptions" :class="optionClasses(option)" @click.stop="selectOption(option)">
           {{ option.label }}
         </div>
       </section>
@@ -41,8 +39,8 @@
         <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
       </span>
 
-      <CheckIcon v-if="valid" class="absolute right-12 w-7 h-7 text-emerald-600" />
-      <XCircleIcon v-if="invalid" class="absolute right-12 w-7 h-7 text-red-600" />
+      <CheckIcon v-if="valid" class="absolute right-11 w-7 h-7 text-emerald-600" />
+      <XCircleIcon v-if="invalid" class="absolute right-11 w-7 h-7 text-red-600" />
     </div>
     <span v-if="errorMessage" class="text-xs font-medium text-red-600">{{ errorMessage }}</span>
     <span v-if="helpText" class="text-xs font-medium text-gray-400">{{ helpText }}</span>
@@ -51,7 +49,7 @@
 
 <script setup lang="ts">
 import { computed, ref, PropType, Ref } from "vue";
-import { useFloating, autoPlacement, offset } from "@floating-ui/vue";
+import { useFloating, autoUpdate, flip, offset, size } from "@floating-ui/vue";
 import { CheckIcon, XCircleIcon, ChevronDownIcon, ChevronUpIcon } from "@heroicons/vue/24/outline";
 
 type DropdownOption = {
@@ -91,8 +89,8 @@ const props = defineProps({
 
   // The value of the input.
   modelValue: {
-    type: Object as PropType<DropdownOption>,
-    required: true,
+    type: Object as PropType<DropdownOption> | null,
+    default: null,
   },
 
   // Add a ping to the top right corner of the input.
@@ -124,9 +122,10 @@ const props = defineProps({
  * * Component State
  * * All the state variables which are required to make the component work.
  */
-const dropdownOpen = ref(false);
-const filteredOptions = ref(props.options);
-const searchQuery = ref("");
+const dropdownOpen: Ref<Boolean> = ref(false);
+const filteredOptions: Ref<DropdownOption[]> = ref(props.options);
+const searchQuery: Ref<String> = ref("");
+const keyboardSelected: Ref<DropdownOption | null> = ref(null);
 
 /**
  * * Component Refs
@@ -137,8 +136,22 @@ const outsideRef: Ref<HTMLDivElement | null> = ref(null);
 const optionsRef: Ref<HTMLDivElement | null> = ref(null);
 
 const { floatingStyles } = useFloating(outsideRef, optionsRef, {
+  whileElementsMounted: autoUpdate,
   placement: "bottom",
-  middleware: [autoPlacement({ padding: 4 }), offset(8)],
+  middleware: [
+    offset(8),
+    flip({ padding: 4 }),
+    size({
+      padding: 4,
+      apply({ availableWidth, availableHeight, elements }) {
+        // Do things with the data, e.g.
+        Object.assign(elements.floating.style, {
+          maxWidth: `${availableWidth}px`,
+          maxHeight: `${availableHeight}px`,
+        });
+      },
+    }),
+  ],
 });
 
 /**
@@ -163,8 +176,9 @@ const openDropdown = () => {
   searchQuery.value = "";
   (inputRef.value as unknown as HTMLInputElement)?.focus(); // Cast to unknown to avoid TS error
 
-  // Add the event handle to close the dropdown when clicking outside of the dropdown
+  // Add event handlers for the dropdown
   window.addEventListener("click", clickedOutsideDropdown);
+  window.addEventListener("keydown", handleKeyboardNavigation);
 };
 
 /**
@@ -173,8 +187,9 @@ const openDropdown = () => {
 const closeDropdown = () => {
   dropdownOpen.value = false;
 
-  // Remove the event handler to close the dropdown when clicking outside of the dropdown
+  // Remove event handlers from the dropdown
   window.removeEventListener("click", clickedOutsideDropdown);
+  window.removeEventListener("keydown", handleKeyboardNavigation);
 };
 
 /**
@@ -185,8 +200,11 @@ const closeDropdown = () => {
  */
 const selectOption = (option: DropdownOption) => {
   emit("update:modelValue", option);
-
   closeDropdown();
+
+  // Reset the values for the options
+  filteredOptions.value = props.options;
+  keyboardSelected.value = null;
 };
 
 /**
@@ -205,6 +223,30 @@ const handleInput = (event: Event) => {
 
   // Set the filtered options
   filteredOptions.value = searchedOptions;
+
+  // If only one option is left, select it
+  if (filteredOptions.value.length === 1) {
+    keyboardSelected.value = filteredOptions.value[0];
+  }
+};
+
+/**
+ * Handle when the user focuses the input. This will allow the user to open the dropdown by pressing the space bar.
+ *
+ * @param { Event } event - The event which fired the event.
+ */
+const handleFocus = (event: Event) => {
+  window.addEventListener("keydown", openDropdownWithSpace);
+};
+
+/**
+ * Handle when the user blurs the input. This will remove the event listener which allows the user to open the dropdown
+ * using the space bar.
+ *
+ * @param { Event } event - The event which is being handled.
+ */
+const handleBlur = (event: Event) => {
+  window.removeEventListener("keydown", openDropdownWithSpace);
 };
 
 /**
@@ -217,6 +259,95 @@ const clickedOutsideDropdown = (event: MouseEvent) => {
     closeDropdown();
   }
 };
+
+/**
+ * Handle when the user opens the dropdown using the space key while it's focused.
+ *
+ * @param { KeyboardEvent } event - The keyboard event which is being handled.
+ */
+const openDropdownWithSpace = (event: KeyboardEvent) => {
+  if (event.key === " " && !dropdownOpen.value) {
+    event.preventDefault();
+    openDropdown();
+  }
+};
+
+/**
+ * Handle when the user presses any of the keys on the keyboard. This will allow the user to navigate through the options, clos
+ * the dropdown, etc.
+ *
+ * @param { KeyboardEvent } event - The keyboard event which is being handled.
+ */
+const handleKeyboardNavigation = (event: KeyboardEvent) => {
+  switch (event.key) {
+    case "Escape":
+      closeDropdown();
+      break;
+
+    case "ArrowDown":
+      event.preventDefault();
+
+      // If there is no selected option, select the first option
+      if (!keyboardSelected.value) {
+        keyboardSelected.value = filteredOptions.value[0];
+        return;
+      }
+
+      // If the selected option is the last option, select the first option
+      if (filteredOptions.value.indexOf(keyboardSelected.value) === filteredOptions.value.length - 1) {
+        keyboardSelected.value = filteredOptions.value[0];
+        return;
+      }
+
+      // Select the next option
+      keyboardSelected.value = filteredOptions.value[filteredOptions.value.indexOf(keyboardSelected.value) + 1];
+      break;
+
+    case "ArrowUp":
+      event.preventDefault();
+
+      // If there is no selected option, select the last option
+      if (!keyboardSelected.value) {
+        keyboardSelected.value = filteredOptions.value[filteredOptions.value.length - 1];
+        return;
+      }
+
+      // If the selected option is the first option, select the last option
+      if (filteredOptions.value.indexOf(keyboardSelected.value) === 0) {
+        keyboardSelected.value = filteredOptions.value[filteredOptions.value.length - 1];
+        return;
+      }
+
+      // Select the previous option
+      keyboardSelected.value = filteredOptions.value[filteredOptions.value.indexOf(keyboardSelected.value) - 1];
+      break;
+
+    case "Enter":
+      event.preventDefault();
+
+      // If there is no selected option, do nothing
+      if (!keyboardSelected.value) return;
+
+      selectOption(keyboardSelected.value);
+      break;
+
+    default:
+      break;
+  }
+};
+
+/**
+ * Classes which are applied to the option elements.
+ *
+ * @param { DropdownOption } option - The option which is being rendered.
+ */
+const optionClasses = (option: DropdownOption) => ({
+  "w-full px-2 py-2 cursor-pointer": true,
+
+  // Selected option
+  "bg-gray-600/40": option.value === keyboardSelected.value?.value,
+  "hover:bg-slate-600/20": option.value !== keyboardSelected.value?.value,
+});
 
 /**
  * * Component Computed
