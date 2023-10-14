@@ -89,7 +89,7 @@ const props = defineProps({
 
   // The value of the input.
   modelValue: {
-    type: Object as PropType<DropdownOption> | null,
+    type: Object as PropType<DropdownOption | null>,
     default: null,
   },
 
