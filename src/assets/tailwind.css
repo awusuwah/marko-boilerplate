@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+  Scrollbar Customization
+
+  The scrollbar on this website is customized to float over the content and only be visible when used. This prevents the content from
+  jumping when the scrollbar appears and disappears + it looks much more modern and clean.
+*/
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.5);
+}

@@ -1,16 +1,16 @@
 <template>
   <slot name="trigger">
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="openDialog">Open Dialog</button>
+    <Button variant="primary" @click="openDialog">Open Dialog</Button>
   </slot>
 
   <Teleport to="body">
     <Transition name="modal">
       <div v-if="open" ref="dialogRef" class="fixed inset-0 flex items-end md:items-center md:justify-center z-40">
         <!-- Backdrop -->
-        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="absolute inset-0 bg-black/50" @click="closeDialog"></div>
 
         <!-- Modal -->
-        <div class="dialog bg-slate-800 w-full md:w-1/2 p-6 rounded-t-xl md:rounded-xl shadow-lg z-10 relative">
+        <div class="dialog bg-slate-800 w-full md:w-1/2 px-6 py-4 rounded-t-xl md:rounded-xl shadow-lg z-10 relative">
           <h2 v-if="title" class="text-xl font-semibold text-white mb-2">{{ title }}</h2>
 
           <button class="absolute top-3 right-3" @click="closeDialog">
@@ -27,6 +27,8 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
+
+import Button from "../button/Button.vue";
 
 // * State
 const open = ref(false);
@@ -48,6 +50,9 @@ const props = defineProps({
  */
 const openDialog = () => {
   open.value = true;
+
+  // Prevent scrolling on the body when the dialog is open.
+  document.body.style.overflow = "hidden";
 };
 
 /**
@@ -55,6 +60,9 @@ const openDialog = () => {
  */
 const closeDialog = () => {
   open.value = false;
+
+  // Re-enable scrolling on the body when the dialog is closed.
+  document.body.style.overflow = "auto";
 };
 </script>
 

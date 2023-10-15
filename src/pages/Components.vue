@@ -71,6 +71,54 @@
     </section>
 
     <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+      <h2 class="text-xl font-semibold text-white">Buttons</h2>
+
+      <div class="flex flex-col gap-2">
+        <div class="flex gap-2">
+          <Button label="Button Solid" variant="primary" @click="handleButtonClicked" />
+          <Button label="Button Tinted" variant="primary" style-variant="tinted" @click="handleButtonClicked" />
+          <Button label="Button Outline" variant="primary" style-variant="outline" @click="handleButtonClicked" />
+        </div>
+
+        <div class="flex gap-2">
+          <Button label="Button Solid" variant="secondary" @click="handleButtonClicked" />
+          <Button label="Button Tinted" variant="secondary" style-variant="tinted" @click="handleButtonClicked" />
+          <Button label="Button Outline" variant="secondary" style-variant="outline" @click="handleButtonClicked" />
+        </div>
+
+        <div class="flex gap-2">
+          <Button label="Button Solid" variant="neutral" @click="handleButtonClicked" />
+          <Button label="Button Tinted" variant="neutral" style-variant="tinted" @click="handleButtonClicked" />
+          <Button label="Button Outline" variant="neutral" style-variant="outline" @click="handleButtonClicked" />
+        </div>
+
+        <div class="flex gap-2">
+          <Button label="Button Solid" variant="success" @click="handleButtonClicked" />
+          <Button label="Button Tinted" variant="success" style-variant="tinted" @click="handleButtonClicked" />
+          <Button label="Button Outline" variant="success" style-variant="outline" @click="handleButtonClicked" />
+        </div>
+
+        <div class="flex gap-2">
+          <Button label="Button Solid" variant="danger" @click="handleButtonClicked" />
+          <Button label="Button Tinted" variant="danger" style-variant="tinted" @click="handleButtonClicked" />
+          <Button label="Button Outline" variant="danger" style-variant="outline" @click="handleButtonClicked" />
+        </div>
+
+        <div class="flex gap-2">
+          <Button label="Button Solid" variant="warning" @click="handleButtonClicked" />
+          <Button label="Button Tinted" variant="warning" style-variant="tinted" @click="handleButtonClicked" />
+          <Button label="Button Outline" variant="warning" style-variant="outline" @click="handleButtonClicked" />
+        </div>
+
+        <div class="flex gap-2">
+          <Button label="Button Solid" variant="info" @click="handleButtonClicked" />
+          <Button label="Button Tinted" variant="info" style-variant="tinted" @click="handleButtonClicked" />
+          <Button label="Button Outline" variant="info" style-variant="outline" @click="handleButtonClicked" />
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Dialogs</h2>
 
       <div class="flex gap-2">
@@ -87,8 +135,9 @@ import { ref } from "vue";
 
 import { UserIcon } from "@heroicons/vue/24/outline";
 
-import Dialog from "../components/dialog/Dialog.vue";
+import Button from "../components/button/Button.vue";
 import Checkbox from "../components/checkbox/Checkbox.vue";
+import Dialog from "../components/dialog/Dialog.vue";
 import Dropdown from "../components/dropdown/Dropdown.vue";
 import Number from "../components/number/Number.vue";
 import Text from "../components/text/Text.vue";
@@ -149,4 +198,13 @@ const checkbox = ref(false);
 const text = ref("awu");
 const number = ref(24);
 const dropdown = ref(null);
+
+/**
+ * Handle when the button is clicked. This method logs a message to the console since this is just a demo.
+ *
+ * @param { PointerEvent } event - The event which triggered the method.
+ */
+const handleButtonClicked = (event: MouseEvent) => {
+  console.log("Button clicked!", event);
+};
 </script>
