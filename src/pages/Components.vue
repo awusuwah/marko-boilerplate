@@ -1,5 +1,6 @@
 <template>
   <div class="container mx-auto py-10 flex flex-col gap-y-6">
+    <!-- Text Input -->
     <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Text Input</h2>
 
@@ -33,6 +34,7 @@
       </Text>
     </section>
 
+    <!-- Number Input -->
     <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Number</h2>
 
@@ -43,6 +45,7 @@
       <Number v-model="number" id="number5" label="Favorite Number" placeholder="24" help-text="We don't share sensible data ;)" />
     </section>
 
+    <!-- Checkboxes -->
     <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Checkboxes</h2>
 
@@ -53,6 +56,7 @@
       <Checkbox v-model="checkbox" id="checkbox5" label="Newsletter?" help-text="We promise this is not spam!" />
     </section>
 
+    <!-- Dropdowns -->
     <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Dropdowns</h2>
 
@@ -70,6 +74,7 @@
       />
     </section>
 
+    <!-- Buttons -->
     <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Buttons</h2>
 
@@ -118,6 +123,7 @@
       </div>
     </section>
 
+    <!-- Dialogs -->
     <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Dialogs</h2>
 
@@ -125,6 +131,76 @@
         <Dialog title="Create Supplier">
           <Dropdown v-model="dropdown" id="dropdown6" label="Country" placeholder="Austria" :options="COUNTRIES" />
         </Dialog>
+      </div>
+    </section>
+
+    <!-- Badges -->
+    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+      <h2 class="text-xl font-semibold text-white">Badges</h2>
+
+      <div class="flex flex-col gap-2">
+        <div class="flex gap-2">
+          <Badge label="Badge Solid" variant="primary" />
+          <Badge label="Badge Solid" variant="primary" @click="handleBadgeDismissed" dismissable />
+          <Badge label="Badge Tinted" variant="primary" style-variant="tinted" />
+          <Badge label="Badge Tinted" variant="primary" @click="handleBadgeDismissed" style-variant="tinted" dismissable />
+          <Badge label="Badge Outline" variant="primary" style-variant="outline" />
+          <Badge label="Badge Outline" variant="primary" @click="handleBadgeDismissed" style-variant="outline" dismissable />
+        </div>
+
+        <div class="flex gap-2">
+          <Badge label="Badge Solid" variant="secondary" />
+          <Badge label="Badge Solid" variant="secondary" @click="handleBadgeDismissed" dismissable />
+          <Badge label="Badge Tinted" variant="secondary" style-variant="tinted" />
+          <Badge label="Badge Tinted" variant="secondary" @click="handleBadgeDismissed" style-variant="tinted" dismissable />
+          <Badge label="Badge Outline" variant="secondary" style-variant="outline" />
+          <Badge label="Badge Outline" variant="secondary" @click="handleBadgeDismissed" style-variant="outline" dismissable />
+        </div>
+
+        <div class="flex gap-2">
+          <Badge label="Badge Solid" variant="neutral" />
+          <Badge label="Badge Solid" variant="neutral" @click="handleBadgeDismissed" dismissable />
+          <Badge label="Badge Tinted" variant="neutral" style-variant="tinted" />
+          <Badge label="Badge Tinted" variant="neutral" @click="handleBadgeDismissed" style-variant="tinted" dismissable />
+          <Badge label="Badge Outline" variant="neutral" style-variant="outline" />
+          <Badge label="Badge Outline" variant="neutral" @click="handleBadgeDismissed" style-variant="outline" dismissable />
+        </div>
+
+        <div class="flex gap-2">
+          <Badge label="Badge Solid" variant="success" />
+          <Badge label="Badge Solid" variant="success" @click="handleBadgeDismissed" dismissable />
+          <Badge label="Badge Tinted" variant="success" style-variant="tinted" />
+          <Badge label="Badge Tinted" variant="success" @click="handleBadgeDismissed" style-variant="tinted" dismissable />
+          <Badge label="Badge Outline" variant="success" style-variant="outline" />
+          <Badge label="Badge Outline" variant="success" @click="handleBadgeDismissed" style-variant="outline" dismissable />
+        </div>
+
+        <div class="flex gap-2">
+          <Badge label="Badge Solid" variant="danger" />
+          <Badge label="Badge Solid" variant="danger" @click="handleBadgeDismissed" dismissable />
+          <Badge label="Badge Tinted" variant="danger" style-variant="tinted" />
+          <Badge label="Badge Tinted" variant="danger" @click="handleBadgeDismissed" style-variant="tinted" dismissable />
+          <Badge label="Badge Outline" variant="danger" style-variant="outline" />
+          <Badge label="Badge Outline" variant="danger" @click="handleBadgeDismissed" style-variant="outline" dismissable />
+        </div>
+
+        <div class="flex gap-2">
+          <Badge label="Badge Solid" variant="warning" />
+          <Badge label="Badge Solid" variant="warning" @click="handleBadgeDismissed" dismissable />
+          <Badge label="Badge Tinted" variant="warning" style-variant="tinted" />
+          <Badge label="Badge Tinted" variant="warning" @click="handleBadgeDismissed" style-variant="tinted" dismissable />
+          <Badge label="Badge Outline" variant="warning" style-variant="outline" />
+          <Badge label="Badge Outline" variant="warning" @click="handleBadgeDismissed" style-variant="outline" dismissable />
+        </div>
+
+        <div class="flex gap-2">
+          <Badge label="Badge Solid" variant="info" />
+          <Badge label="Badge Solid" variant="info" @click="handleBadgeDismissed" dismissable />
+          <Badge label="Badge Tinted" variant="info" style-variant="tinted" />
+          <Badge label="Badge Tinted" variant="info" @click="handleBadgeDismissed" style-variant="tinted" dismissable />
+          <Badge label="Badge Outline" variant="info" style-variant="outline" />
+          <Badge label="Badge Outline" variant="info" @click="handleBadgeDismissed" style-variant="outline" dismissable />
+        </div>
       </div>
     </section>
   </div>
@@ -135,6 +211,7 @@ import { ref } from "vue";
 
 import { UserIcon } from "@heroicons/vue/24/outline";
 
+import Badge from "../components/badge/Badge.vue";
 import Button from "../components/button/Button.vue";
 import Checkbox from "../components/checkbox/Checkbox.vue";
 import Dialog from "../components/dialog/Dialog.vue";
@@ -202,9 +279,18 @@ const dropdown = ref(null);
 /**
  * Handle when the button is clicked. This method logs a message to the console since this is just a demo.
  *
- * @param { PointerEvent } event - The event which triggered the method.
+ * @param { PointerEvent } event - The event which triggered the handler.
  */
-const handleButtonClicked = (event: MouseEvent) => {
+const handleButtonClicked = (event: PointerEvent) => {
   console.log("Button clicked!", event);
+};
+
+/**
+ * Handle when the badge is dismissed. This method logs a message to the console since this is just a demo.
+ *
+ * @param { PointerEvent } event - The event which triggered the handler.
+ */
+const handleBadgeDismissed = (event: PointerEvent) => {
+  console.log("Badge dismissed!", event);
 };
 </script>
