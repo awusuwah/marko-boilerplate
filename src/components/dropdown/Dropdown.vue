@@ -40,7 +40,7 @@
           ref="optionsRef"
           id="dropdown-options"
           role="menu"
-          class="z-50 w-full border border-slate-600 bg-gray-800 divide-y divide-slate-600 rounded text-gray-200 overflow-auto"
+          class="w-full border border-slate-600 bg-gray-800 divide-y divide-slate-600 rounded text-gray-200 overflow-auto z-50"
           :style="floatingStyles"
         >
           <div v-for="option in filteredOptions" :class="optionClasses(option)" role="menuitem" @click.stop="selectOption(option)">

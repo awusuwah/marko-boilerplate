@@ -71,10 +71,12 @@
     </section>
 
     <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
-      <h2 class="text-xl font-semibold text-white">Buttons</h2>
+      <h2 class="text-xl font-semibold text-white">Dialogs</h2>
 
       <div class="flex gap-2">
-        <Button label="Button" />
+        <Dialog title="Create Supplier">
+          <Dropdown v-model="dropdown" id="dropdown6" label="Country" placeholder="Austria" :options="COUNTRIES" />
+        </Dialog>
       </div>
     </section>
   </div>
@@ -85,7 +87,7 @@ import { ref } from "vue";
 
 import { UserIcon } from "@heroicons/vue/24/outline";
 
-import Button from "../components/button/Button.vue";
+import Dialog from "../components/dialog/Dialog.vue";
 import Checkbox from "../components/checkbox/Checkbox.vue";
 import Dropdown from "../components/dropdown/Dropdown.vue";
 import Number from "../components/number/Number.vue";
