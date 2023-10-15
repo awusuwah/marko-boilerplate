@@ -53,6 +53,9 @@ const openDialog = () => {
 
   // Prevent scrolling on the body when the dialog is open.
   document.body.style.overflow = "hidden";
+
+  // Attach event handlers for the dialog
+  window.addEventListener("keydown", closeDialogOnEscape);
 };
 
 /**
@@ -63,6 +66,20 @@ const closeDialog = () => {
 
   // Re-enable scrolling on the body when the dialog is closed.
   document.body.style.overflow = "auto";
+
+  // Remove event handlers for the dialog
+  window.removeEventListener("keydown", closeDialogOnEscape);
+};
+
+/**
+ * Close the dialog when the user clicks the escape key.
+ *
+ * @param { KeyboardEvent } event - The event which triggered the handler.
+ */
+const closeDialogOnEscape = (event: KeyboardEvent) => {
+  if (event.key === "Escape") {
+    closeDialog();
+  }
 };
 </script>
 

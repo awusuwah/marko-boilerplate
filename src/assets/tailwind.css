@@ -17,9 +17,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 body::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.3);
 }
 
 body:hover::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
 }
