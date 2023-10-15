@@ -11,8 +11,8 @@
         @input="handleInput"
       />
       <div :class="buttonWrapperClasses">
-        <button :class="buttonClasses" tabindex="-1" @click="increment">+</button>
-        <button :class="buttonClasses" tabindex="-1" @click="decrement">-</button>
+        <button :class="buttonClasses" aria-label="Increment" tabindex="-1" @click="increment">+</button>
+        <button :class="buttonClasses" aria-label="Decrement" tabindex="-1" @click="decrement">-</button>
       </div>
 
       <!-- Add the optional ping -->

@@ -1,7 +1,14 @@
 <template>
   <div class="flex flex-col">
     <label :for="id" :class="labelClasses">{{ label }}</label>
-    <div ref="outsideRef" :class="wrapperClasses" @click="toggleDropdown">
+    <div
+      ref="outsideRef"
+      :class="wrapperClasses"
+      role="button"
+      aria-controls="dropdown-options"
+      :aria-expanded="dropdownOpen ? true : false"
+      @click="toggleDropdown"
+    >
       <input
         ref="inputRef"
         v-bind="$attrs"
@@ -15,23 +22,32 @@
         @input="handleInput"
       />
       <div :class="buttonWrapperClasses">
-        <button :class="buttonClasses" tabindex="-1" @click.stop="toggleDropdown">
+        <button
+          :class="buttonClasses"
+          :aria-label="dropdownOpen ? 'Close Dropdown' : 'Open Dropdown'"
+          tabindex="-1"
+          @click.stop="toggleDropdown"
+        >
           <ChevronUpIcon v-if="dropdownOpen" class="w-5 h-5 text-gray-400" />
           <ChevronDownIcon v-if="!dropdownOpen" class="w-5 h-5 text-gray-400" />
         </button>
       </div>
 
       <!-- Options for the dropdown -->
-      <section
-        v-if="dropdownOpen"
-        ref="optionsRef"
-        class="z-50 w-full border border-slate-600 bg-gray-800 divide-y divide-slate-600 rounded text-gray-200 overflow-auto"
-        :style="floatingStyles"
-      >
-        <div v-for="option in filteredOptions" :class="optionClasses(option)" @click.stop="selectOption(option)">
-          {{ option.label }}
-        </div>
-      </section>
+      <Teleport to="body">
+        <section
+          v-if="dropdownOpen"
+          ref="optionsRef"
+          id="dropdown-options"
+          role="menu"
+          class="z-50 w-full border border-slate-600 bg-gray-800 divide-y divide-slate-600 rounded text-gray-200 overflow-auto"
+          :style="floatingStyles"
+        >
+          <div v-for="option in filteredOptions" :class="optionClasses(option)" role="menuitem" @click.stop="selectOption(option)">
+            {{ option.label }}
+          </div>
+        </section>
+      </Teleport>
 
       <!-- Add the optional ping -->
       <span v-if="ping" class="absolute flex h-3 w-3 -top-1.5 -right-1.5">
@@ -144,9 +160,12 @@ const { floatingStyles } = useFloating(outsideRef, optionsRef, {
     size({
       padding: 4,
       apply({ availableWidth, availableHeight, elements }) {
+        // get the width of the inputref
+        const inputWidth = elements.reference.offsetWidth;
+
         // Do things with the data, e.g.
         Object.assign(elements.floating.style, {
-          maxWidth: `${availableWidth}px`,
+          maxWidth: `${inputWidth}px`,
           maxHeight: `${availableHeight}px`,
         });
       },
