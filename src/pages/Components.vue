@@ -69,6 +69,14 @@
         help-text="This will be shown on your profile."
       />
     </section>
+
+    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+      <h2 class="text-xl font-semibold text-white">Buttons</h2>
+
+      <div class="flex gap-2">
+        <Button label="Button" />
+      </div>
+    </section>
   </div>
 </template>
 
@@ -77,6 +85,7 @@ import { ref } from "vue";
 
 import { UserIcon } from "@heroicons/vue/24/outline";
 
+import Button from "../components/button/Button.vue";
 import Checkbox from "../components/checkbox/Checkbox.vue";
 import Dropdown from "../components/dropdown/Dropdown.vue";
 import Number from "../components/number/Number.vue";
