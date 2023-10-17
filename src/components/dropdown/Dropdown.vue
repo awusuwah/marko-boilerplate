@@ -35,7 +35,7 @@
 
       <!-- Options for the dropdown -->
       <Teleport to="body">
-        <section
+        <ul
           v-if="dropdownOpen"
           ref="optionsRef"
           id="dropdown-options"
@@ -43,10 +43,10 @@
           class="w-full border border-slate-600 bg-gray-800 divide-y divide-slate-600 rounded text-gray-200 overflow-auto z-50"
           :style="floatingStyles"
         >
-          <div v-for="option in filteredOptions" :class="optionClasses(option)" role="menuitem" @click.stop="selectOption(option)">
+          <li v-for="option in filteredOptions" :class="optionClasses(option)" role="menuitem" @click.stop="selectOption(option)">
             {{ option.label }}
-          </div>
-        </section>
+          </li>
+        </ul>
       </Teleport>
 
       <!-- Add the optional ping -->

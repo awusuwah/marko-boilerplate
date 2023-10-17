@@ -49,6 +49,7 @@ export default {
           active: colors.blue[600],
           contrast: colors.white,
         },
+        bgr: colors.slate,
       },
     },
   },

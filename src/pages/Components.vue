@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto py-10 flex flex-col gap-y-6">
     <!-- Text Input -->
-    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+    <Card class="flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Text Input</h2>
 
       <Text v-model="text" id="text1" type="text" label="Username" placeholder="awusuwah" />
@@ -32,10 +32,10 @@
           <UserIcon class="pl-3 w-8 h-8 text-gray-500" />
         </template>
       </Text>
-    </section>
+    </Card>
 
     <!-- Number Input -->
-    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+    <Card class="flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Number</h2>
 
       <Number v-model="number" id="number1" label="Favorite Number" placeholder="24" />
@@ -43,10 +43,10 @@
       <Number v-model="number" id="number3" label="Favorite Number" placeholder="24" valid />
       <Number v-model="number" id="number4" label="Favorite Number" placeholder="24" invalid error-message="Currently blocked age!" />
       <Number v-model="number" id="number5" label="Favorite Number" placeholder="24" help-text="We don't share sensible data ;)" />
-    </section>
+    </Card>
 
     <!-- Checkboxes -->
-    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+    <Card class="flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Checkboxes</h2>
 
       <Checkbox v-model="checkbox" id="checkbox1" label="Newsletter?" />
@@ -54,10 +54,10 @@
       <Checkbox v-model="checkbox" id="checkbox3" label="Newsletter?" valid />
       <Checkbox v-model="checkbox" id="checkbox4" label="Newsletter?" invalid error-message="You HAVE to accept!!!" />
       <Checkbox v-model="checkbox" id="checkbox5" label="Newsletter?" help-text="We promise this is not spam!" />
-    </section>
+    </Card>
 
     <!-- Dropdowns -->
-    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+    <Card class="flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Dropdowns</h2>
 
       <Dropdown v-model="dropdown" id="dropdown1" label="Country" placeholder="Austria" :options="COUNTRIES" />
@@ -72,10 +72,10 @@
         :options="COUNTRIES"
         help-text="This will be shown on your profile."
       />
-    </section>
+    </Card>
 
     <!-- Buttons -->
-    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+    <Card class="flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Buttons</h2>
 
       <div class="flex flex-col gap-2">
@@ -121,10 +121,10 @@
           <Button label="Button Outline" variant="info" style-variant="outline" @click="handleButtonClicked" />
         </div>
       </div>
-    </section>
+    </Card>
 
     <!-- Dialogs -->
-    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+    <Card class="flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Dialogs</h2>
 
       <div class="flex gap-2">
@@ -132,15 +132,15 @@
           <Dropdown v-model="dropdown" id="dropdown6" label="Country" placeholder="Austria" :options="COUNTRIES" />
         </Dialog>
       </div>
-    </section>
+    </Card>
 
     <!-- Badges -->
-    <section class="bg-slate-800 rounded-lg py-4 px-12 flex flex-col gap-4">
+    <Card class="flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Badges</h2>
 
       <div class="flex flex-col gap-2">
         <div class="flex gap-2">
-          <Badge label="Badge Solid" variant="primary" />
+          <Badge label="Badge Solid" variant="primary" @dismiss="" />
           <Badge label="Badge Solid" variant="primary" @click="handleBadgeDismissed" dismissable />
           <Badge label="Badge Tinted" variant="primary" style-variant="tinted" />
           <Badge label="Badge Tinted" variant="primary" @click="handleBadgeDismissed" style-variant="tinted" dismissable />
@@ -202,7 +202,66 @@
           <Badge label="Badge Outline" variant="info" @click="handleBadgeDismissed" style-variant="outline" dismissable />
         </div>
       </div>
-    </section>
+    </Card>
+
+    <!-- Message Cards -->
+    <Card class="flex flex-col gap-4">
+      <h2 class="text-xl font-semibold text-white">Message Cards</h2>
+
+      <div class="flex flex-col gap-2">
+        <div class="flex gap-2">
+          <MessageCard message="Message Solid" variant="primary" />
+          <MessageCard message="Message Tinted" variant="primary" style-variant="tinted" />
+          <MessageCard message="Message Outline" variant="primary" style-variant="outline" />
+        </div>
+
+        <div class="flex gap-2">
+          <MessageCard message="Message Solid" variant="secondary" />
+          <MessageCard message="Message Tinted" variant="secondary" style-variant="tinted" />
+          <MessageCard message="Message Outline" variant="secondary" style-variant="outline" />
+        </div>
+
+        <div class="flex gap-2">
+          <MessageCard message="Message Solid" variant="neutral" />
+          <MessageCard message="Message Tinted" variant="neutral" style-variant="tinted" />
+          <MessageCard message="Message Outline" variant="neutral" style-variant="outline" />
+        </div>
+
+        <div class="flex gap-2">
+          <MessageCard message="Message Solid" variant="success" />
+          <MessageCard message="Message Tinted" variant="success" style-variant="tinted" />
+          <MessageCard message="Message Outline" variant="success" style-variant="outline" />
+        </div>
+
+        <div class="flex gap-2">
+          <MessageCard message="Message Solid" variant="danger" />
+          <MessageCard message="Message Tinted" variant="danger" style-variant="tinted" />
+          <MessageCard message="Message Outline" variant="danger" style-variant="outline" />
+        </div>
+
+        <div class="flex gap-2">
+          <MessageCard message="Message Solid" variant="warning" />
+          <MessageCard message="Message Tinted" variant="warning" style-variant="tinted" />
+          <MessageCard message="Message Outline" variant="warning" style-variant="outline" />
+        </div>
+
+        <div class="flex gap-2">
+          <MessageCard message="Message Solid" variant="info" />
+          <MessageCard message="Message Tinted" variant="info" style-variant="tinted" />
+          <MessageCard message="Message Outline" variant="info" style-variant="outline" />
+        </div>
+      </div>
+    </Card>
+
+    <!-- Cards -->
+    <Card class="flex flex-col gap-4">
+      <h2 class="text-xl font-semibold text-white">Cards</h2>
+
+      <div class="flex gap-2">
+        <Card> Regular Card </Card>
+        <Card clickable @click="handleCardClicked"> Clickable Card</Card>
+      </div>
+    </Card>
   </div>
 </template>
 
@@ -213,9 +272,11 @@ import { UserIcon } from "@heroicons/vue/24/outline";
 
 import Badge from "../components/badge/Badge.vue";
 import Button from "../components/button/Button.vue";
+import Card from "../components/card/Card.vue";
 import Checkbox from "../components/checkbox/Checkbox.vue";
 import Dialog from "../components/dialog/Dialog.vue";
 import Dropdown from "../components/dropdown/Dropdown.vue";
+import MessageCard from "../components/messageCard/MessageCard.vue";
 import Number from "../components/number/Number.vue";
 import Text from "../components/text/Text.vue";
 
@@ -292,5 +353,14 @@ const handleButtonClicked = (event: PointerEvent) => {
  */
 const handleBadgeDismissed = (event: PointerEvent) => {
   console.log("Badge dismissed!", event);
+};
+
+/**
+ * Handle when the card is clicked. This method logs a message to the console since this is just a demo.
+ *
+ * @param { PointerEvent } event - The event which triggered the handler.
+ */
+const handleCardClicked = (event: PointerEvent) => {
+  console.log("Card clicked!", event);
 };
 </script>

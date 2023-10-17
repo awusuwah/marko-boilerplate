@@ -1,62 +1,62 @@
 <template>
-  <component :is="is" :class="badgeClasses">
-    <slot>
-      {{ label }}
-    </slot>
+  <div :class="messageCardClasses">
+    <!-- The icon based on the variant. Can be overwritten by using the `icon` slot -->
+    <div v-if="!withoutIcon">
+      <slot name="icon">
+        <component :is="messageCardIconByVariant" class="w-6 h-6" />
+      </slot>
+    </div>
 
-    <button v-if="dismissable" class="flex items-center justify-center" aria-label="Dismiss" @click="emit('dismiss')">
-      <XMarkIcon class="w-4 h-4" aria-hidden="true" />
-    </button>
-  </component>
+    <!-- The message which is being displayed in the card. Can be overwritten by using the `default` slot -->
+    <slot>
+      <span class="font-semibold">{{ message }}</span>
+    </slot>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed, PropType } from "vue";
-import { XMarkIcon } from "@heroicons/vue/24/outline";
+import { CheckCircleIcon, ExclamationCircleIcon, ExclamationTriangleIcon, InformationCircleIcon } from "@heroicons/vue/24/outline";
 
-const emit = defineEmits(["dismiss"]);
-
+// Props
 const props = defineProps({
-  // The HTML element which should be rendered as the badge.
-  is: {
-    type: String,
-    default: "span",
-  },
-
-  // The label of the badge.
-  label: {
+  // The message which is being displayed in the card.
+  message: {
     type: String,
     default: null,
   },
 
-  // The color variant the badge will take on.
+  // The color variant the button will take on.
   variant: {
     type: String as PropType<"primary" | "secondary" | "neutral" | "success" | "danger" | "warning" | "info">,
     default: "neutral",
   },
 
-  // The style variant the badge will take on.
+  // The style variant the button will take on.
   styleVariant: {
     type: String as PropType<"solid" | "outline" | "tinted">,
     default: "solid",
   },
 
-  // Enable the badge to be dismissable.
-  dismissable: {
+  // Render the message card without an icon.
+  noIcon: {
     type: Boolean,
     default: false,
   },
 });
 
 /**
- * Classes which are applied to the badge.
+ * Determine wether the message card should be rendered without an icon based on the `noIcon` & `variant` props.
  */
-const badgeClasses = computed(() => ({
-  "flex items-center gap-x-2 rounded-md text-sm font-semibold": true,
+const withoutIcon = computed(
+  () => props.noIcon || props.variant === "primary" || props.variant === "secondary" || props.variant === "neutral"
+);
 
-  // Dismissable
-  "pl-3 pr-2 py-0.5": props.dismissable,
-  "px-3 py-0.5": !props.dismissable,
+/**
+ * Classes which are applied to the message card.
+ */
+const messageCardClasses = computed(() => ({
+  "flex flex-row gap-3 p-4 rounded": true,
 
   // Primary Variant
   "bg-pri text-pri-contrast": props.variant === "primary" && props.styleVariant === "solid",
@@ -93,4 +93,26 @@ const badgeClasses = computed(() => ({
   "bg-inf/50 text-inf-contrast": props.variant === "info" && props.styleVariant === "tinted",
   "bg-transparent text-inf-contrast ring-1 ring-inset ring-inf": props.variant === "info" && props.styleVariant === "outline",
 }));
+
+/**
+ * The icon which is displayed in the message card based on the variant.
+ */
+const messageCardIconByVariant = computed(() => {
+  switch (props.variant) {
+    case "success":
+      return CheckCircleIcon;
+
+    case "danger":
+      return ExclamationCircleIcon;
+
+    case "warning":
+      return ExclamationTriangleIcon;
+
+    case "info":
+      return InformationCircleIcon;
+
+    default:
+      return null;
+  }
+});
 </script>
