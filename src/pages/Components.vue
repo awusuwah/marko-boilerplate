@@ -74,6 +74,17 @@
       />
     </Card>
 
+    <!-- Range Slider -->
+    <Card class="flex flex-col gap-4">
+      <h2 class="text-xl font-semibold text-white">Range Slider</h2>
+
+      <Range v-model="range" id="range1" label="Volume" :min="10" :max="100" />
+      <Range v-model="range" id="range2" label="Volume" :min="10" :max="100" ping />
+      <Range v-model="range" id="range3" label="Volume" :min="10" :max="100" valid />
+      <Range v-model="range" id="range4" label="Volume" :min="10" :max="100" invalid error-message="Please set a valid volume." />
+      <Range v-model="range" id="range5" label="Volume" :min="10" :max="100" help-text="This will set the volume of the video." />
+    </Card>
+
     <!-- Buttons -->
     <Card class="flex flex-col gap-4">
       <h2 class="text-xl font-semibold text-white">Buttons</h2>
@@ -130,6 +141,16 @@
       <div class="flex gap-2">
         <Dialog title="Create Supplier">
           <Dropdown v-model="dropdown" id="dropdown6" label="Country" placeholder="Austria" :options="COUNTRIES" />
+        </Dialog>
+        <Dialog title="Create Supplier">
+          <Dropdown v-model="dropdown" id="dropdown7" label="Country" placeholder="Austria" :options="COUNTRIES" />
+
+          <template #footer="{ close }">
+            <div class="flex justify-end gap-2 mt-4">
+              <Button variant="neutral" @click="close">Close</Button>
+              <Button variant="primary" @click="close">Create</Button>
+            </div>
+          </template>
         </Dialog>
       </div>
     </Card>
@@ -278,6 +299,7 @@ import Dialog from "../components/dialog/Dialog.vue";
 import Dropdown from "../components/dropdown/Dropdown.vue";
 import MessageCard from "../components/messageCard/MessageCard.vue";
 import Number from "../components/number/Number.vue";
+import Range from "../components/range/Range.vue";
 import Text from "../components/text/Text.vue";
 
 const COUNTRIES = [
@@ -335,7 +357,8 @@ const COUNTRIES = [
 const checkbox = ref(false);
 const text = ref("awu");
 const number = ref(24);
-const dropdown = ref(null);
+const dropdown = ref({ label: "", value: "FR" });
+const range = ref(50);
 
 /**
  * Handle when the button is clicked. This method logs a message to the console since this is just a demo.

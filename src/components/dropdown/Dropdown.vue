@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, PropType, Ref } from "vue";
+import { computed, ref, PropType, Ref, onMounted } from "vue";
 import { useFloating, autoUpdate, flip, offset, size } from "@floating-ui/vue";
 import { CheckIcon, XCircleIcon, ChevronDownIcon, ChevronUpIcon } from "@heroicons/vue/24/outline";
 
@@ -309,17 +309,20 @@ const handleKeyboardNavigation = (event: KeyboardEvent) => {
       // If there is no selected option, select the first option
       if (!keyboardSelected.value) {
         keyboardSelected.value = filteredOptions.value[0];
+        scrollKeyboardSelectedIntoView();
         return;
       }
 
       // If the selected option is the last option, select the first option
       if (filteredOptions.value.indexOf(keyboardSelected.value) === filteredOptions.value.length - 1) {
         keyboardSelected.value = filteredOptions.value[0];
+        scrollKeyboardSelectedIntoView();
         return;
       }
 
       // Select the next option
       keyboardSelected.value = filteredOptions.value[filteredOptions.value.indexOf(keyboardSelected.value) + 1];
+      scrollKeyboardSelectedIntoView();
       break;
 
     case "ArrowUp":
@@ -328,17 +331,20 @@ const handleKeyboardNavigation = (event: KeyboardEvent) => {
       // If there is no selected option, select the last option
       if (!keyboardSelected.value) {
         keyboardSelected.value = filteredOptions.value[filteredOptions.value.length - 1];
+        scrollKeyboardSelectedIntoView();
         return;
       }
 
       // If the selected option is the first option, select the last option
       if (filteredOptions.value.indexOf(keyboardSelected.value) === 0) {
         keyboardSelected.value = filteredOptions.value[filteredOptions.value.length - 1];
+        scrollKeyboardSelectedIntoView();
         return;
       }
 
       // Select the previous option
       keyboardSelected.value = filteredOptions.value[filteredOptions.value.indexOf(keyboardSelected.value) - 1];
+      scrollKeyboardSelectedIntoView();
       break;
 
     case "Enter":
@@ -356,6 +362,18 @@ const handleKeyboardNavigation = (event: KeyboardEvent) => {
 };
 
 /**
+ * Scroll the keyboard selected option into view to make sure it's visible to the user.
+ */
+const scrollKeyboardSelectedIntoView = () => {
+  if (!keyboardSelected.value) return;
+
+  const selectedOptionElement = optionsRef.value?.children[filteredOptions.value.indexOf(keyboardSelected.value)] as HTMLElement;
+
+  if (!selectedOptionElement) return;
+  selectedOptionElement.scrollIntoView({ behavior: "smooth", block: "nearest" });
+};
+
+/**
  * Classes which are applied to the option elements.
  *
  * @param { DropdownOption } option - The option which is being rendered.
@@ -366,6 +384,22 @@ const optionClasses = (option: DropdownOption) => ({
   // Selected option
   "bg-gray-600/40": option.value === keyboardSelected.value?.value,
   "hover:bg-slate-600/20": option.value !== keyboardSelected.value?.value,
+});
+
+/**
+ * * Component Lifecycle
+ * * All the lifecycle hooks which are required to make the component work.
+ */
+onMounted(() => {
+  // If the modelValue is not null, preselect the right option
+  if (!props.modelValue) return;
+
+  // Find the option which matches the modelValue & select it
+  const matchingOption = props.options.find((option) => option.value === props.modelValue?.value);
+
+  if (!matchingOption) return;
+  selectOption(matchingOption);
+  keyboardSelected.value = matchingOption;
 });
 
 /**

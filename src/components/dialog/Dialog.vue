@@ -18,6 +18,13 @@
           </button>
 
           <slot>Default Dialog Content</slot>
+
+          <!-- Footer -->
+          <slot name="footer" :close="closeDialog">
+            <div class="flex justify-end mt-4">
+              <Button variant="neutral" @click="closeDialog">Close</Button>
+            </div>
+          </slot>
         </div>
       </div>
     </Transition>

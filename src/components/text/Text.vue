@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { CheckIcon, XCircleIcon, BanknotesIcon } from "@heroicons/vue/24/outline";
+import { CheckIcon, XCircleIcon } from "@heroicons/vue/24/outline";
 
 defineOptions({
   inheritAttrs: false,
